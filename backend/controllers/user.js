@@ -23,8 +23,9 @@ async function handleUserSignUp(req,res){
               maxAge: 24 * 60 * 60 * 1000, 
              });
 
-        res.status(201).json({ message: "User created successfully",token ,user });
+        res.status(200).json({ message: "User created successfully",token ,user });
        }catch (error) {
+         console.error("Signup error:", error); 
          if (error.code === 11000) {
            res.status(400).json({ message: "Email already exists" });
          } else {
@@ -41,6 +42,7 @@ async function handleUserLogin(req,res){
          if(!user){
          return  res.status(401).send("user not not found");  
          }
+         console.log("user data",user);
          // check the password 
          const isPasswordCorrect= await compare(password,user.password);
          if(!isPasswordCorrect){
@@ -65,12 +67,17 @@ async function verifyAuth(req,res){
    try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ message: 'Account no longer exists' });
-
+    
+    if(user.id !==req.user.id) return res.status(404).json({message:"user access got removed "})
     return res.status(200).json(user); 
     
   } catch (err) {
     return res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+async function logout (req,res){
+     res.clearCookie('ai-cookie');
+  return res.status(200).json({ message: 'Logged out successfully' });
+}
 
-export{handleUserSignUp,handleUserLogin,getAllUsers,verifyAuth};
+export{handleUserSignUp,handleUserLogin,getAllUsers,verifyAuth,logout};

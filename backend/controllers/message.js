@@ -42,3 +42,30 @@ export const generateChatCompletion = async (req, res) => {
   
   }
 };
+ export async function sendAllChats(req,res){ 
+   try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'user not found' });
+    return res.status(200).json({chats:user.chats}); 
+    
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+export async function deleteAllChats(req,res){
+
+  try {
+    const user = await User.findById(req.user.id);
+    if(!user) return res.status(404).json({message:"user not found"});
+
+    user.chats=[];
+    await user.save();
+    console.log(user.chats);
+    return res.status(200).json({message:"user chats deleted sucessfully"})
+
+  } catch (error) {
+    console.log("error from delete controller",error);
+    return res.status(500).json({message:" error occured while deleting user"})
+  }
+}

@@ -15,7 +15,7 @@ const validate=(validations)=>{
 }
 
 export const signupValidation=[
-    body('name').notEmpty().withMessage("name should not be empty"),
+    body('userName').notEmpty().withMessage("name should not be empty"),
     body('email').notEmpty().trim().isEmail().withMessage("enter a valid email"),
     body('password').notEmpty().isLength({min:6}).withMessage("password should be more than 6 chars"),
 ];
