@@ -2,10 +2,10 @@
 //import './App.css'
 import Headers from './components/header' ;
 import{Route,Routes}from 'react-router-dom';
-import Chat from './pages/chat';
+import Chat from './pages/Chat';
 import Home from './pages/home';
 import Login from './pages/login';
-import Signin from './pages/singin';
+import Signin from './pages/Singin';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './contecxt/AuthContext';
 

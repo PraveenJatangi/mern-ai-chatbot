@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaPaperPlane } from "react-icons/fa";
 import { useAuth } from '../contecxt/AuthContext';
+import ChatItem from '../components/chat/chatitem';
+import toast from 'react-hot-toast';
+import {getAllChats,deleteChats } from '../helper/api-communication'
+import { useNavigate } from 'react-router-dom';
+
 
 export default function ChatBox() {
-
+  const navigate =useNavigate();
   const auth=useAuth();
   // local state
   const [input, setInput]   = useState('');
@@ -16,10 +21,8 @@ export default function ChatBox() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-
     setThread((prev) => [...prev, { role: 'user', content: input }]);
     setLoading(true);
-
     try {
       const res = await axios.post('/chat/new', {
         message: input,
@@ -40,11 +43,40 @@ export default function ChatBox() {
       setInput('');
     }
   };
+ const handleDeteleChat= async()=>{
+      try {
+        toast.loading(" Deleting Chats",{id:"deletingChat"})
+         await  deleteChats();
+         setThread([]);
+         toast.success(' chats deleted',{id:"deletingChat"})
+      } catch (error) {
+        toast.error("error accoured ",{id:"deletingChat"})
+      }
+ }
+
+  useEffect(()=>{
+    if(auth?.loading &&auth?.user){
+      toast.loading("loading chats",{id:"loadChats"});
+      getAllChats().then((data)=>{
+        setThread([...data.chats]);
+        toast.success("chats sucessfull",{id:"loadChats"});
+      }).catch((erorr)=>{
+        console.log(erorr);
+        toast.error("error accured",{id:"loadChats"})
+      })
+    }
+  },[auth]);
+
+   useEffect(()=>{
+          if(!auth?.user){
+            return navigate('/')
+          }
+      },[auth])
 
   return (
-     <div className="w-screen h-[calc(100vh-70px)] overflow-y-auto bg-[#0f172a] text-white flex">
+     <div className="w-screen h-[calc(100vh-72px)] overflow-y-auto bg-[#0f172a] text-white flex  ">
       
-      <div className="w-72 min-w-[18rem] bg-[#112031] rounded-lg shadow-lg m-4 p-6 flex flex-col items-center">
+      <div className="hidden md:flex w-72 min-w-[18rem] bg-[#112031] rounded-lg shadow-lg m-4 p-6  flex-col items-center">
         {/* Avatar */}
         <div className="w-16 h-16 rounded-full bg-slate-200 text-slate-900 flex items-center justify-center text-2xl font-semibold mb-6">
          {auth?.user?.userName[0]}{auth?.user?.userName[2]}
@@ -59,7 +91,7 @@ export default function ChatBox() {
         </p>
 
         {/* Clear button (sticks to bottom) */}
-        <button className="mt-auto bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold py-2 px-4 rounded">
+        <button onClick={handleDeteleChat} className="mt-auto bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold py-2 px-4 rounded">
           CLEAR CONVERSATION
         </button>
       </div>
@@ -70,22 +102,10 @@ export default function ChatBox() {
         <h1 className="text-4xl font-bold mt-5">Model‑GPT3.5 Turbo</h1>
 
         {/* (Chat messages would go here) */}
-        <div className="flex-1 w-full mt-20 px-10 text-white space-y-3">
+        <div className="flex-1 w-full mt-20 px-4 sm:px-10 overflow-y-auto text-white space-y-3 ">
+
   {thread.map((msg, idx) => (
-    <div
-      key={idx}
-      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-    >
-      <p
-        className={`inline-block ${
-          msg.role === 'user'
-            ? 'bg-gray-400 border border-blue-300 text-black'
-            : ' text-white'
-        } px-4 py-2 ml-20 mr-20 rounded-md text-sm`}
-      >
-        {msg.content}
-      </p>
-    </div>
+    <ChatItem content={msg.content} role={msg.role} key={idx}/>
   ))}
       </div>
 

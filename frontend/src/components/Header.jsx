@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useAuth} from '../contecxt/AuthContext'
 import {Link} from 'react-router-dom'
 import {NavigationLink} from '../components/shared/NavigationLink'
 export default function Header() {
   const user= useAuth();
-  
+  const { logoutUser } = useAuth()
 
   return (
     <header>
@@ -16,7 +16,12 @@ export default function Header() {
           user.loading?<>
            <>
            <NavigationLink to='/chat' className='bg-sky-400 hover:bg-sky-700 text-white' childern={'go to chat'} />
-           <NavigationLink to='/logout' className='bg-gray-400 hover:bg-gray-700 text-white' childern={'logout'} />
+             <button
+                  onClick={logoutUser}
+                  className="ml-2 bg-gray-400 hover:bg-gray-700 text-white px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
            </>
           </>
           :

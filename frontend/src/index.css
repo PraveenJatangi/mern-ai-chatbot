@@ -6,4 +6,13 @@ body,html{
     font-family: sans-serif;
     color: white;
     background-color: rgb(69, 68, 68);
+    overflow-x: hidden;
+}
+
+.rotate{
+animation:rotation 8s infinite linear;}
+@keyframes rotation{
+from{transform:rotate(0deg);
+}
+to { transform:rotate (359deg);}
 }
