@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const auth = useAuth();
+  const{userFrmConxt}=useAuth();
   const navigate = useNavigate();
 
  const [formData, setFormData]=useState({
@@ -24,7 +25,6 @@ export default function Login() {
     try {
       toast.loading("signin in ",{id:"login"})
        await auth?.login(formData);
-     
        toast.success("signed in",{id:"login"})   
     } catch (error) {
        console.log(error);
@@ -37,6 +37,8 @@ export default function Login() {
       return  navigate('/chat')
      }
   },[auth]);
+   
+
 
  return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#0f172a]">

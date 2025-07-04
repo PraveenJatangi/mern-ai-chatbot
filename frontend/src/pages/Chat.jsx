@@ -26,7 +26,7 @@ export default function ChatBox() {
     try {
       const res = await axios.post('/chat/new', {
         message: input,
-      });
+      },{withCredentials: true});
 
       setThread((prev) => [
         ...prev,

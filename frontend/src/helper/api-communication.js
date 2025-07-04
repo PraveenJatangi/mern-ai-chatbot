@@ -12,7 +12,7 @@ export const loginUser =async (credentails)=>{
 }
 export const signupUser =async (credentails)=>{
    console.log('credentials from sign:',credentails);
-   const res = await axios.post("/user/signup",credentails,{withCredentials: true});
+   const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/signup`,credentails,{withCredentials: true});
    
    const data= res.data;
 
