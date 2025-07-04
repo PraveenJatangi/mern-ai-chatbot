@@ -10,10 +10,18 @@ import cros from 'cors';
 
 const app = express();
 
+const allowedOrigins = [
+  'https://mern-ai-chatbot-frontend-coral.vercel.app',
+  'http://localhost:5173'           
+];
+
 //middlewares
 app.use(cros({
-    origin:"https://mern-ai-chatbot-frontend-coral.vercel.app/",
-     credentials:true}));
+    origin:allowedOrigins,
+     credentials:true,methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+   allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
