@@ -77,7 +77,7 @@ async function verifyAuth(req,res){
   }
 };
 async function logout (req,res){
-    res.clearCookie('token', {
+    res.clearCookie('ai-cookie', {
     httpOnly: true,
     secure: true,          
     sameSite: 'none'           
