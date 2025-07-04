@@ -4,7 +4,7 @@ import Headers from './components/Header' ;
 import{Route,Routes}from 'react-router-dom';
 import Chat from './pages/Chat';
 import Home from './pages/Home';
-import Login from './pages/login';
+import Login from './pages/Login';
 import Signin from './pages/Singin';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './contecxt/AuthContext';
