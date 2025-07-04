@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
 import {useAuth} from '../contecxt/AuthContext'
-import {Link} from 'react-router-dom'
-import {NavigationLink} from '../components/shared/NavigationLink'
+import {NavigationLink} from './shared/NavigationLink'
 export default function Header() {
   const user= useAuth();
   const { logoutUser } = useAuth()
