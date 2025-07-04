@@ -19,7 +19,8 @@ async function handleUserSignUp(req,res){
          const token= createJsonToken(user);
              res.cookie('ai-cookie', token, {
               httpOnly: true,
-              sameSite: 'Lax',
+              sameSite: 'none',
+              secure: true,
               maxAge: 24 * 60 * 60 * 1000, 
              });
 
@@ -76,7 +77,11 @@ async function verifyAuth(req,res){
   }
 };
 async function logout (req,res){
-     res.clearCookie('ai-cookie');
+    res.clearCookie('token', {
+    httpOnly: true,
+    secure: true,          
+    sameSite: 'none'           
+  });;
   return res.status(200).json({ message: 'Logged out successfully' });
 }
 
